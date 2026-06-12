@@ -16,7 +16,7 @@
       <t-button size="small" theme="primary" data-id="{{item._id}}" data-status="accepted" bind:tap="setStatus">接单</t-button>
       <t-button size="small" variant="outline" data-id="{{item._id}}" data-status="declined" bind:tap="setStatus">婉拒</t-button>
     </block>
-    <t-button wx:if="{{item.status === 'accepted'}}" size="small" theme="success"
+    <t-button wx:if="{{item.status === 'accepted'}}" size="small" theme="primary"
               data-id="{{item._id}}" data-status="done" bind:tap="setStatus">做完了</t-button>
   </view>
 </view>
