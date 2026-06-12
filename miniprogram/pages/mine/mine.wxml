@@ -1,0 +1,51 @@
+<view class="card row" bind:tap="editProfile">
+  <image wx:if="{{profile.avatar}}" class="me-avatar" src="{{profile.avatar}}" />
+  <view wx:else class="me-avatar me-avatar-empty">👤</view>
+  <view class="flex1" style="margin-left:20rpx">
+    <view style="font-weight:600">{{profile ? profile.nickname : '点这里设置昵称头像'}}</view>
+    <view class="muted">点击修改资料</view>
+  </view>
+</view>
+
+<view class="card row" wx:if="{{isAdmin}}" bind:tap="goAdmin">
+  <view class="flex1 section-title">👨‍🍳 主厨入口</view>
+  <t-badge count="{{newCount}}" max-count="{{99}}"><view class="muted">进入管理 ›</view></t-badge>
+</view>
+<view class="card row" wx:elif="{{!claimed}}" bind:tap="claim">
+  <view class="flex1 section-title">👨‍🍳 认领主厨之位</view>
+  <view class="muted">仅限第一人 ›</view>
+</view>
+
+<view class="section-title" style="margin:24rpx 24rpx 0">我的订单</view>
+<t-empty wx:if="{{!orders.length}}" description="还没点过菜" />
+<view wx:for="{{orders}}" wx:key="_id" class="card">
+  <view class="row">
+    <view class="flex1">{{item.title}}</view>
+    <t-tag theme="{{item.statusTheme}}" variant="light">{{item.statusText}}</t-tag>
+  </view>
+  <view class="muted" style="margin-top:8rpx">{{item.itemsText}}</view>
+  <view class="muted" wx:if="{{item.status === 'declined' && item.declineReason}}">主厨说：{{item.declineReason}}</view>
+</view>
+
+<view class="row" style="margin:24rpx 24rpx 0">
+  <view class="flex1 section-title">想吃许愿 🌠</view>
+  <t-button size="small" variant="outline" bind:tap="openWish">我要许愿</t-button>
+</view>
+<t-empty wx:if="{{!wishes.length}}" description="还没许过愿" />
+<view wx:for="{{wishes}}" wx:key="_id" class="card">
+  <view class="row">
+    <view class="flex1">「{{item.text}}」</view>
+    <view class="muted">{{item.statusText}}</view>
+  </view>
+  <view class="muted" wx:if="{{item.reply}}">主厨：{{item.reply}}</view>
+</view>
+
+<t-popup visible="{{wishVisible}}" placement="bottom" bind:visible-change="onWishVisible">
+  <view class="wish-pop">
+    <view class="section-title" style="margin-bottom:16rpx">想吃什么？</view>
+    <t-textarea placeholder="菜单上没有但想吃的菜…" value="{{wishText}}" maxlength="{{100}}" indicator bind:change="onWishText" />
+    <t-button block theme="primary" style="margin-top:24rpx" bind:tap="sendWish">送出愿望</t-button>
+  </view>
+</t-popup>
+
+<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" />
