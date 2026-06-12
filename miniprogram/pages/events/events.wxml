@@ -1,0 +1,9 @@
+<t-empty wx:if="{{!events.length}}" description="还没有饭局，等主厨发起吧" />
+<view wx:for="{{events}}" wx:key="_id" class="card" data-id="{{item._id}}" bind:tap="go">
+  <view class="row">
+    <view class="flex1 section-title">{{item.title}}</view>
+    <t-tag theme="{{item.isOpen ? 'warning' : 'default'}}" variant="light">{{item.statusText}}</t-tag>
+  </view>
+  <view class="muted" style="margin-top:8rpx">用餐 {{item.mealText}} · 截止 {{item.deadlineText}}</view>
+  <view class="muted" wx:if="{{item.note}}">{{item.note}}</view>
+</view>
