@@ -1,0 +1,41 @@
+<view class="card">
+  <view class="section-title">菜单</view>
+  <view wx:for="{{items}}" wx:key="dishId" class="row line">
+    <view class="flex1">{{item.name}}<text wx:if="{{item.note}}" class="muted">（{{item.note}}）</text></view>
+    <view>×{{item.qty}}</view>
+  </view>
+</view>
+
+<view class="card" wx:if="{{openEvent}}">
+  <view class="section-title">这单算到</view>
+  <view class="mode {{forEvent ? 'mode-on' : ''}}" data-mode="event" bind:tap="onMode">
+    🍲 「{{openEvent.title}}」饭局（{{openEvent.mealText}} 开饭）
+  </view>
+  <view class="mode {{!forEvent ? 'mode-on' : ''}}" data-mode="anytime" bind:tap="onMode">📅 随时单（自选时间）</view>
+</view>
+
+<view class="card" wx:if="{{!forEvent || !openEvent}}">
+  <view class="section-title">什么时候吃</view>
+  <picker mode="selector" range="{{dateOptions}}" range-key="label" value="{{dateIndex}}" bindchange="onDate">
+    <view class="picker-cell">{{dateOptions[dateIndex].label}} ›</view>
+  </picker>
+  <picker mode="selector" range="{{slots}}" value="{{slotIndex}}" bindchange="onSlot">
+    <view class="picker-cell">{{slots[slotIndex]}} ›</view>
+  </picker>
+</view>
+
+<view class="card row">
+  <view class="flex1">{{forEvent && openEvent ? '我带几个人来' : '几个人吃'}}</view>
+  <t-stepper theme="filled" min="{{1}}" max="{{50}}" value="{{headcount}}" bind:change="onHeadcount" />
+</view>
+
+<view class="card">
+  <t-textarea placeholder="整单备注：忌口、过敏、特别要求…" value="{{orderNote}}"
+              maxlength="{{100}}" indicator bind:change="onNote" />
+</view>
+
+<view class="footer">
+  <t-button block theme="primary" loading="{{submitting}}" bind:tap="submit">提交给主厨</t-button>
+</view>
+
+<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" />

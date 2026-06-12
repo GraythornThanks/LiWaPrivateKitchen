@@ -1,0 +1,5 @@
+.section-title { margin-bottom: 16rpx; }
+.mode { border: 2rpx solid #eee; border-radius: 12rpx; padding: 20rpx; margin-top: 16rpx; }
+.mode-on { border-color: #e3592c; background: #fff3ec; }
+.picker-cell { padding: 20rpx 0; border-bottom: 1rpx solid #f0f0f0; }
+.footer { padding: 24rpx; }
