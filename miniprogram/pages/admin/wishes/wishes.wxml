@@ -1,0 +1,13 @@
+<t-empty wx:if="{{!wishes.length}}" description="还没人许愿" />
+<view wx:for="{{wishes}}" wx:key="_id" class="card">
+  <view class="row">
+    <view class="flex1" style="font-weight:600">{{item.nickname}}</view>
+    <view class="muted">{{item.timeText}}</view>
+  </view>
+  <view style="margin-top:8rpx">「{{item.text}}」</view>
+  <view class="muted" wx:if="{{item.status !== 'new'}}">{{item.statusText}}{{item.reply ? ' · ' + item.reply : ''}}</view>
+  <view class="row btns" wx:if="{{item.status === 'new'}}">
+    <t-button size="small" theme="primary" data-id="{{item._id}}" data-status="accepted" bind:tap="reply">安排上</t-button>
+    <t-button size="small" variant="outline" data-id="{{item._id}}" data-status="declined" bind:tap="reply">下次一定</t-button>
+  </view>
+</view>
