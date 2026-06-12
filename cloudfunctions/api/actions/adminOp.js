@@ -41,7 +41,33 @@ async function dishDelete(ctx, p) {
   return ok()
 }
 
-const OPS = { dishCreate, dishUpdate, dishDelete }
+const EVENT_TRANSITIONS = { open: ['closed', 'done'], closed: ['done'], done: [] }
+
+async function eventCreate(ctx, p) {
+  const title = typeof p.title === 'string' ? p.title.trim() : ''
+  if (!title || title.length > 30) return err('INVALID', '饭局名要 1-30 个字')
+  if (!Number.isFinite(p.mealTime) || !Number.isFinite(p.deadline)) return err('INVALID', '时间没选对')
+  if (p.deadline <= ctx.now) return err('INVALID', '截止时间要晚于现在')
+  if (p.deadline > p.mealTime) return err('INVALID', '截止时间要早于开饭时间')
+  const eventId = await ctx.db.insert('events', {
+    title, mealTime: p.mealTime, deadline: p.deadline,
+    note: typeof p.note === 'string' ? p.note.slice(0, 100) : '',
+    status: 'open', createdAt: ctx.now,
+  })
+  return ok({ eventId })
+}
+
+async function eventSetStatus(ctx, p) {
+  const ev = await ctx.db.getDoc('events', p.eventId)
+  if (!ev) return err('NOT_FOUND', '这场饭局不存在')
+  if (!(EVENT_TRANSITIONS[ev.status] || []).includes(p.status)) {
+    return err('INVALID_TRANSITION', `不能从「${ev.status}」改成「${p.status}」`)
+  }
+  await ctx.db.updateDoc('events', p.eventId, { status: p.status })
+  return ok()
+}
+
+const OPS = { dishCreate, dishUpdate, dishDelete, eventCreate, eventSetStatus }
 
 module.exports = async function adminOp(ctx, payload) {
   const cfg = await ctx.db.getDoc('config', 'main')
