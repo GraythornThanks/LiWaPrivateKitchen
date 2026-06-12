@@ -67,7 +67,31 @@ async function eventSetStatus(ctx, p) {
   return ok()
 }
 
-const OPS = { dishCreate, dishUpdate, dishDelete, eventCreate, eventSetStatus }
+const ORDER_TRANSITIONS = { new: ['accepted', 'declined'], accepted: ['done'], done: [], declined: [] }
+
+async function orderSetStatus(ctx, p) {
+  const order = await ctx.db.getDoc('orders', p.orderId)
+  if (!order) return err('NOT_FOUND', '订单不存在')
+  if (!(ORDER_TRANSITIONS[order.status] || []).includes(p.status)) {
+    return err('INVALID_TRANSITION', `不能从「${order.status}」改成「${p.status}」`)
+  }
+  const patch = { status: p.status, updatedAt: ctx.now }
+  if (p.status === 'declined') patch.declineReason = typeof p.declineReason === 'string' ? p.declineReason.slice(0, 50) : ''
+  await ctx.db.updateDoc('orders', p.orderId, patch)
+  return ok()
+}
+
+async function wishReply(ctx, p) {
+  const wish = await ctx.db.getDoc('wishes', p.wishId)
+  if (!wish) return err('NOT_FOUND', '这条愿望不存在')
+  if (!['accepted', 'declined'].includes(p.status)) return err('INVALID', '状态不对劲')
+  await ctx.db.updateDoc('wishes', p.wishId, {
+    status: p.status, reply: typeof p.reply === 'string' ? p.reply.slice(0, 100) : '',
+  })
+  return ok()
+}
+
+const OPS = { dishCreate, dishUpdate, dishDelete, eventCreate, eventSetStatus, orderSetStatus, wishReply }
 
 module.exports = async function adminOp(ctx, payload) {
   const cfg = await ctx.db.getDoc('config', 'main')
