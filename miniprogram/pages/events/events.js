@@ -13,7 +13,7 @@ Page({
         mealText: fmtDateTime(e.mealTime),
         deadlineText: fmtDateTime(e.deadline),
         statusText: eventStatusText(e, now),
-        isOpen: eventStatusText(e, now) === '点菜中',
+        isOpen: e.status === 'open' && e.deadline > now,
       })),
     })
   },
