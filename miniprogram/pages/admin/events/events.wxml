@@ -1,0 +1,40 @@
+<view class="card row" bind:tap="openCreate">
+  <view class="flex1 section-title">＋ 发起饭局</view>
+</view>
+
+<t-empty wx:if="{{!events.length}}" description="还没发起过饭局" />
+<view wx:for="{{events}}" wx:key="_id" class="card">
+  <view class="row">
+    <view class="flex1 section-title">{{item.title}}</view>
+    <t-tag theme="{{item.statusText === '点菜中' ? 'warning' : 'default'}}" variant="light">{{item.statusText}}</t-tag>
+  </view>
+  <view class="muted" style="margin-top:8rpx">用餐 {{item.mealText}} · 截止 {{item.deadlineText}}</view>
+  <view class="row btns">
+    <t-button wx:if="{{item.status === 'open'}}" size="small" variant="outline"
+              data-id="{{item._id}}" data-status="closed" bind:tap="setStatus">提前截止</t-button>
+    <t-button wx:if="{{item.status === 'open' || item.status === 'closed'}}" size="small" variant="outline"
+              data-id="{{item._id}}" data-status="done" bind:tap="setStatus">标记结束</t-button>
+  </view>
+</view>
+
+<t-popup visible="{{createVisible}}" placement="bottom" bind:visible-change="onCreateVisible">
+  <view class="create-pop">
+    <view class="section-title" style="margin-bottom:16rpx">发起饭局</view>
+    <t-input label="名字" placeholder="比如：周六晚餐" value="{{title}}" data-field="title" bind:change="onField" />
+    <view class="row line" bind:tap="openMealPicker">
+      <view class="flex1">开饭时间</view><view class="muted">{{mealText}}</view>
+    </view>
+    <view class="row line" bind:tap="openDeadlinePicker">
+      <view class="flex1">点菜截止</view><view class="muted">{{deadlineText}}</view>
+    </view>
+    <t-input label="说明" placeholder="可不填" value="{{note}}" data-field="note" bind:change="onField" />
+    <t-button block theme="primary" style="margin-top:24rpx" loading="{{saving}}" bind:tap="create">发起</t-button>
+  </view>
+</t-popup>
+
+<t-date-time-picker visible="{{mealPickerVisible}}" mode="minute" title="开饭时间"
+                    start="{{pickerStart}}" end="{{pickerEnd}}"
+                    bind:confirm="onMealConfirm" bind:cancel="onMealCancel" />
+<t-date-time-picker visible="{{deadlinePickerVisible}}" mode="minute" title="点菜截止"
+                    start="{{pickerStart}}" end="{{pickerEnd}}"
+                    bind:confirm="onDeadlineConfirm" bind:cancel="onDeadlineCancel" />
