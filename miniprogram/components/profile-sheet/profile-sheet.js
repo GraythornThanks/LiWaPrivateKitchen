@@ -3,8 +3,10 @@ const { call, toast } = require('../../utils/api')
 Component({
   properties: { visible: Boolean },
   data: { nickname: '', avatarUrl: '', saving: false },
-  lifetimes: {
-    attached() {
+  observers: {
+    // 每次打开时重读缓存，避免云端恢复/他处修改后的陈旧数据
+    visible(v) {
+      if (!v) return
       const p = wx.getStorageSync('profile')
       if (p) this.setData({ nickname: p.nickname || '', avatarUrl: p.avatar || '' })
     },
@@ -33,8 +35,9 @@ Component({
         this.triggerEvent('close')
       } catch (e) {
         toast(e.message || '保存失败')
+      } finally {
+        this.setData({ saving: false })
       }
-      this.setData({ saving: false })
     },
   },
 })
