@@ -50,6 +50,26 @@ describe('submitOrder 随时单', () => {
     const r2 = await submitOrder(ctx(seed()), { items: [{ dishId: 'ghost', qty: 1 }], mealTime: NOW + 1 })
     expect(r2.code).toBe('DISH_OFF')
   })
+
+  it('重复菜品 / 空 dishId / 超过 30 道 → INVALID', async () => {
+    expect((await submitOrder(ctx(seed()), { items: [{ dishId: 'd1', qty: 1 }, { dishId: 'd1', qty: 2 }], mealTime: NOW + 1 })).code).toBe('INVALID')
+    expect((await submitOrder(ctx(seed()), { items: [{ dishId: '', qty: 1 }], mealTime: NOW + 1 })).code).toBe('INVALID')
+    const many = Array.from({ length: 31 }, (_, i) => ({ dishId: 'd' + i, qty: 1 }))
+    expect((await submitOrder(ctx(seed()), { items: many, mealTime: NOW + 1 })).code).toBe('INVALID')
+  })
+
+  it('用餐时间早于现在 2 小时以上 → INVALID', async () => {
+    expect((await submitOrder(ctx(seed()), { items: [{ dishId: 'd1', qty: 1 }], mealTime: NOW - 3 * 3600000 })).code).toBe('INVALID')
+  })
+
+  it('混合购物车：只报下架菜且不落单', async () => {
+    const db = seed()
+    const r = await submitOrder(ctx(db), { items: [{ dishId: 'd1', qty: 1 }, { dishId: 'd2', qty: 1 }], mealTime: NOW + 1 })
+    expect(r.code).toBe('DISH_OFF')
+    expect(r.msg).toContain('凉面')
+    expect(r.msg).not.toContain('红烧肉')
+    expect(await db.count('orders', {})).toBe(0)
+  })
 })
 
 describe('submitOrder 饭局单', () => {

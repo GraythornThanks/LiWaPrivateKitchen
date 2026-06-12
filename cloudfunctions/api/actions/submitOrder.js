@@ -6,12 +6,14 @@ module.exports = async function submitOrder(ctx, payload) {
   if (!profile) return err('NO_PROFILE', '先设置一下昵称头像吧')
 
   const items = payload.items
-  if (!Array.isArray(items) || items.length === 0 || items.length > 30) return err('INVALID', '购物车是空的')
+  if (!Array.isArray(items) || items.length === 0) return err('INVALID', '购物车是空的')
+  if (items.length > 30) return err('INVALID', '一单最多 30 道菜')
   for (const it of items) {
-    if (!it || typeof it.dishId !== 'string' || !Number.isInteger(it.qty) || it.qty < 1 || it.qty > 99) {
+    if (!it || typeof it.dishId !== 'string' || !it.dishId || !Number.isInteger(it.qty) || it.qty < 1 || it.qty > 99) {
       return err('INVALID', '订单数据不对劲')
     }
   }
+  if (new Set(items.map((i) => i.dishId)).size !== items.length) return err('INVALID', '订单数据不对劲')
   const orderNote = typeof payload.orderNote === 'string' ? payload.orderNote.slice(0, 100) : ''
   const headcount = Number.isInteger(payload.headcount) && payload.headcount >= 1 && payload.headcount <= 50 ? payload.headcount : 1
 
@@ -23,6 +25,7 @@ module.exports = async function submitOrder(ctx, payload) {
     if (event.status !== 'open' || now > event.deadline) return err('EVENT_CLOSED', '手慢了，这场饭局已截止点菜')
   } else {
     if (!Number.isFinite(payload.mealTime)) return err('INVALID', '想什么时候吃？选个时间吧')
+    if (payload.mealTime < now - 2 * 3600000) return err('INVALID', '这个时间已经过去啦')
     mealTime = payload.mealTime
   }
 
