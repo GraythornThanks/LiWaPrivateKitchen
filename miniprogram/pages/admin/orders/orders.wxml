@@ -1,0 +1,22 @@
+<t-empty wx:if="{{!orders.length}}" description="还没有订单" />
+<view wx:for="{{orders}}" wx:key="_id" class="card">
+  <view class="row">
+    <image wx:if="{{item.avatar}}" class="o-avatar" src="{{item.avatar}}" />
+    <view wx:else class="o-avatar o-avatar-empty">👤</view>
+    <view class="flex1" style="margin-left:12rpx; font-weight:600">{{item.nickname}}</view>
+    <t-tag theme="{{item.statusTheme}}" variant="light">{{item.statusText}}</t-tag>
+  </view>
+  <view class="muted" style="margin-top:8rpx">{{item.timeText}} · {{item.headcount}} 人 · 下单于 {{item.createdText}}</view>
+  <view wx:for="{{item.items}}" wx:for-item="dish" wx:key="index" class="line">
+    {{dish.name}} ×{{dish.qty}}<text wx:if="{{dish.note}}" class="muted">「{{dish.note}}」</text>
+  </view>
+  <view class="muted" wx:if="{{item.orderNote}}">📝 {{item.orderNote}}</view>
+  <view class="row btns" wx:if="{{item.status === 'new' || item.status === 'accepted'}}">
+    <block wx:if="{{item.status === 'new'}}">
+      <t-button size="small" theme="primary" data-id="{{item._id}}" data-status="accepted" bind:tap="setStatus">接单</t-button>
+      <t-button size="small" variant="outline" data-id="{{item._id}}" data-status="declined" bind:tap="setStatus">婉拒</t-button>
+    </block>
+    <t-button wx:if="{{item.status === 'accepted'}}" size="small" theme="success"
+              data-id="{{item._id}}" data-status="done" bind:tap="setStatus">做完了</t-button>
+  </view>
+</view>
