@@ -1,0 +1,21 @@
+<view class="card">
+  <view class="photo-box" bind:tap="choosePhoto">
+    <image wx:if="{{photo}}" class="big-photo" src="{{photo}}" mode="aspectFill" />
+    <view wx:else class="big-photo big-photo-empty">📷 点击传照片（可不传）</view>
+  </view>
+  <t-input label="菜名" placeholder="比如：红烧肉" value="{{name}}" data-field="name" bind:change="onField" />
+  <view class="row line" bind:tap="openCat">
+    <view class="flex1">分类</view>
+    <view class="muted">{{category || '请选择'}} ›</view>
+  </view>
+  <t-input label="一句话介绍" placeholder="可不填" value="{{desc}}" data-field="desc" bind:change="onField" />
+  <t-input label="排序" type="number" placeholder="数字小的排前面" value="{{sort}}" data-field="sort" bind:change="onField" />
+</view>
+<view class="footer">
+  <t-button block theme="primary" loading="{{saving}}" bind:tap="save">保存</t-button>
+</view>
+
+<t-picker visible="{{catVisible}}" value="{{[category]}}" title="选分类"
+          bind:confirm="onCatConfirm" bind:cancel="onCatCancel">
+  <t-picker-item options="{{catOptions}}" />
+</t-picker>

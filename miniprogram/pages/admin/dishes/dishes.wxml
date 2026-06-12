@@ -1,0 +1,21 @@
+<view class="card row" bind:tap="add">
+  <view class="flex1 section-title">＋ 上新菜</view>
+</view>
+<view wx:for="{{dishes}}" wx:key="_id" class="card">
+  <view class="row">
+    <image wx:if="{{item.photo}}" class="d-photo" src="{{item.photo}}" mode="aspectFill" />
+    <view wx:else class="d-photo d-photo-empty">🍳</view>
+    <view class="flex1" style="margin-left:16rpx">
+      <view style="font-weight:600">{{item.name}}</view>
+      <view class="muted">{{item.category}} · ❤️ {{item.likeCount || 0}}</view>
+    </view>
+    <t-tag theme="{{item.status === 'on' ? 'success' : 'default'}}" variant="light">{{item.status === 'on' ? '在售' : '下架'}}</t-tag>
+  </view>
+  <view class="row btns">
+    <t-button size="small" variant="outline" data-id="{{item._id}}" bind:tap="edit">编辑</t-button>
+    <t-button size="small" variant="outline" data-id="{{item._id}}" data-status="{{item.status}}" bind:tap="toggle">
+      {{item.status === 'on' ? '下架' : '上架'}}
+    </t-button>
+    <t-button size="small" variant="outline" theme="danger" data-id="{{item._id}}" data-name="{{item.name}}" bind:tap="remove">删除</t-button>
+  </view>
+</view>
