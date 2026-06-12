@@ -1,0 +1,12 @@
+<t-popup visible="{{visible}}" placement="bottom" bind:visible-change="onVisibleChange">
+  <view class="sheet">
+    <view class="sheet-title">怎么称呼你？</view>
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" />
+      <view wx:else class="avatar avatar-empty">选头像</view>
+    </button>
+    <input class="nick-input" type="nickname" placeholder="输入昵称（可一键用微信昵称）"
+           value="{{nickname}}" bindinput="onNickname" />
+    <t-button theme="primary" block loading="{{saving}}" bind:tap="onSave">保存</t-button>
+  </view>
+</t-popup>
