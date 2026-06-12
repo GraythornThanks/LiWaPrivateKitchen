@@ -1,0 +1,10 @@
+<view class="dish-card">
+  <image wx:if="{{dish.photo}}" class="photo" src="{{dish.photo}}" mode="aspectFill" />
+  <view wx:else class="photo photo-empty">🍳</view>
+  <view class="info">
+    <view class="name">{{dish.name}}</view>
+    <view class="muted" wx:if="{{dish.desc}}">{{dish.desc}}</view>
+    <view class="like {{liked ? 'liked' : ''}}" bind:tap="onLike">{{liked ? '❤️' : '🤍'}} {{dish.likeCount || 0}}</view>
+  </view>
+  <t-stepper class="stepper" theme="filled" min="{{0}}" max="{{99}}" value="{{qty}}" bind:change="onQty" />
+</view>
