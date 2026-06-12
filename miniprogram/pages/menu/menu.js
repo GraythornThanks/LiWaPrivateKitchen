@@ -75,5 +75,5 @@ Page({
     this.setData({ cartVisible: false })
     wx.navigateTo({ url: '/pages/checkout/checkout' })
   },
-  onPullDownRefresh() { this.loadAll().then(() => wx.stopPullDownRefresh()) },
+  onPullDownRefresh() { this.loadAll().finally(() => wx.stopPullDownRefresh()) },
 })
