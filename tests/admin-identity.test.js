@@ -28,6 +28,13 @@ describe('claimAdmin', () => {
     await claimAdmin(ctx(db, 'host'))
     expect((await claimAdmin(ctx(db, 'host'))).ok).toBe(true)
   })
+
+  it('无 openid（控制台调用）→ INVALID，不写入 config', async () => {
+    const db = makeFakeDb()
+    const r = await claimAdmin({ db, openid: '', now: 1000000 })
+    expect(r.code).toBe('INVALID')
+    expect(await db.getDoc('config', 'main')).toBeNull()
+  })
 })
 
 describe('whoami', () => {
@@ -41,5 +48,11 @@ describe('whoami', () => {
     expect((await whoami(ctx(db, 'host'))).data.isAdmin).toBe(true)
     expect((await whoami(ctx(db, 'guest'))).data.isAdmin).toBe(false)
     expect((await whoami(ctx(db, 'guest'))).data.claimed).toBe(true)
+  })
+
+  it('config 缺 adminOpenids 字段时不崩溃', async () => {
+    const db = makeFakeDb({ config: [{ _id: 'main', categories: [] }] })
+    const r = await whoami(ctx(db, 'host'))
+    expect(r.data.isAdmin).toBe(false)
   })
 })

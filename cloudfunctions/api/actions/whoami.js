@@ -5,6 +5,6 @@ module.exports = async function whoami(ctx) {
   return ok({
     openid: ctx.openid,
     claimed: !!cfg,
-    isAdmin: !!cfg && cfg.adminOpenids.includes(ctx.openid),
+    isAdmin: !!cfg && (cfg.adminOpenids || []).includes(ctx.openid),
   })
 }
