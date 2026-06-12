@@ -58,14 +58,22 @@ Page({
   },
   onProfileClose() { this.setData({ profileVisible: false }) },
   async onLike(e) {
-    if (!this.ensureProfile()) return
     const dish = e.detail.dish
+    if (!this.ensureProfile()) { this._pendingLike = dish; return }
+    this.doLike(dish)
+  },
+  async doLike(dish) {
     const d = await callWithToast('toggleLike', { dishId: dish._id }).catch(() => null)
     if (!d) return
     const dishes = this.data.dishes.map((x) =>
       x._id === dish._id ? { ...x, likeCount: (x.likeCount || 0) + (d.liked ? 1 : -1) } : x)
     this.setData({ dishes, ['likedMap.' + dish._id]: d.liked })
     this.applyFilter()
+  },
+  onProfileSaved() {
+    const dish = this._pendingLike
+    this._pendingLike = null
+    if (dish) this.doLike(dish)
   },
   openCart() { if (this.data.count > 0) this.setData({ cartVisible: true, cartItems: cart.getCart() }) },
   onCartVisible(e) { if (!e.detail.visible) this.setData({ cartVisible: false }) },

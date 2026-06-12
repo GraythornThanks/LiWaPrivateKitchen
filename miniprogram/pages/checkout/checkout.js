@@ -37,8 +37,11 @@ Page({
     return false
   },
   onProfileClose() { this.setData({ profileVisible: false }) },
+  onProfileSaved() {
+    if (this._pendingSubmit) { this._pendingSubmit = false; this.submit() }
+  },
   async submit() {
-    if (!this.ensureProfile()) return
+    if (!this.ensureProfile()) { this._pendingSubmit = true; return }
     const { items, forEvent, openEvent, dateOptions, dateIndex, slotIndex, headcount, orderNote } = this.data
     if (!items.length) return toast('购物车是空的')
     const payload = {

@@ -40,8 +40,14 @@ Page({
   editProfile() { this.setData({ profileVisible: true }) },
   onProfileClose() { this.setData({ profileVisible: false, profile: wx.getStorageSync('profile') || null }) },
   openWish() {
-    if (!wx.getStorageSync('profile')) return this.setData({ profileVisible: true })
+    if (!wx.getStorageSync('profile')) {
+      this._pendingWish = true
+      return this.setData({ profileVisible: true })
+    }
     this.setData({ wishVisible: true })
+  },
+  onProfileSaved() {
+    if (this._pendingWish) { this._pendingWish = false; this.setData({ wishVisible: true }) }
   },
   onWishVisible(e) { if (!e.detail.visible) this.setData({ wishVisible: false }) },
   onWishText(e) { this.setData({ wishText: e.detail.value }) },

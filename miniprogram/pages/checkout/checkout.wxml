@@ -38,4 +38,4 @@
   <t-button block theme="primary" loading="{{submitting}}" bind:tap="submit">提交给主厨</t-button>
 </view>
 
-<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" />
+<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" bind:saved="onProfileSaved" />

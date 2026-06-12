@@ -37,4 +37,4 @@
   </view>
 </t-popup>
 
-<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" />
+<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" bind:saved="onProfileSaved" />
