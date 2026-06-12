@@ -26,7 +26,7 @@ Page({
       orders: od.data.map((o) => ({
         ...o,
         title: o.eventId ? '🍲 ' + o.eventTitle : '📅 ' + fmtDateTime(o.mealTime),
-        itemsText: o.items.map((i) => i.name + '×' + i.qty).join('、'),
+        itemsText: (o.items || []).map((i) => i.name + '×' + i.qty).join('、'),
         statusText: orderStatusText(o.status),
         statusTheme: orderStatusTheme(o.status),
       })),
