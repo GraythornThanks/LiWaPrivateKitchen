@@ -25,4 +25,11 @@ describe('fakeDb', () => {
     await db.removeWhere('likes', { dishId: 'd1' })
     expect(await db.count('likes', {})).toBe(1)
   })
+
+  it('读取返回深拷贝，改返回值不影响库内文档', async () => {
+    const db = makeFakeDb({ orders: [{ _id: 'o1', items: [{ name: 'a', qty: 1 }] }] })
+    const o = await db.getDoc('orders', 'o1')
+    o.items.push({ name: 'b', qty: 2 })
+    expect((await db.getDoc('orders', 'o1')).items).toHaveLength(1)
+  })
 })

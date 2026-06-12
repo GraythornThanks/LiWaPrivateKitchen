@@ -1,5 +1,6 @@
 function makeFakeDb(seed = {}) {
-  const colls = new Map(Object.entries(seed).map(([k, docs]) => [k, new Map(docs.map((d) => [d._id, { ...d }]))]))
+  const clone = (d) => structuredClone(d)
+  const colls = new Map(Object.entries(seed).map(([k, docs]) => [k, new Map(docs.map((d) => [d._id, clone(d)]))]))
   let autoId = 0
   const coll = (name) => { if (!colls.has(name)) colls.set(name, new Map()); return colls.get(name) }
   const matches = (doc, query) => Object.entries(query).every(([k, v]) => doc[k] === v)
@@ -8,9 +9,9 @@ function makeFakeDb(seed = {}) {
   }
   return {
     inc: (n) => ({ __inc: n }),
-    async getDoc(c, id) { const d = coll(c).get(id); return d ? { ...d } : null },
-    async findOne(c, q) { for (const d of coll(c).values()) if (matches(d, q)) return { ...d }; return null },
-    async find(c, q = {}) { return [...coll(c).values()].filter((d) => matches(d, q)).map((d) => ({ ...d })) },
+    async getDoc(c, id) { const d = coll(c).get(id); return d ? clone(d) : null },
+    async findOne(c, q) { for (const d of coll(c).values()) if (matches(d, q)) return clone(d); return null },
+    async find(c, q = {}) { return [...coll(c).values()].filter((d) => matches(d, q)).map((d) => clone(d)) },
     async insert(c, data) { const id = 'id' + ++autoId; coll(c).set(id, { _id: id, ...data }); return id },
     async insertWithId(c, id, data) { if (coll(c).has(id)) return false; coll(c).set(id, { _id: id, ...data }); return true },
     async setDoc(c, id, data) { coll(c).set(id, { _id: id, ...data }) },
