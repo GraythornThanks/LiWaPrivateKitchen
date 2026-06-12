@@ -1,0 +1,9 @@
+{
+  "compileType": "miniprogram",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "appid": "touristappid",
+  "projectname": "LiWaPrivateKitchen",
+  "setting": { "es6": true, "enhance": true, "postcss": true, "minified": true },
+  "libVersion": "3.7.0"
+}

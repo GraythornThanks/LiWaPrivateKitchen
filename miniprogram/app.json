@@ -1,0 +1,46 @@
+{
+  "pages": [
+    "pages/menu/menu",
+    "pages/events/events",
+    "pages/mine/mine",
+    "pages/checkout/checkout",
+    "pages/event-detail/event-detail",
+    "pages/admin/index/index",
+    "pages/admin/orders/orders",
+    "pages/admin/dishes/dishes",
+    "pages/admin/dish-edit/dish-edit",
+    "pages/admin/events/events",
+    "pages/admin/wishes/wishes"
+  ],
+  "window": {
+    "navigationBarTitleText": "李娃私厨",
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f6f6f6"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#e3592c",
+    "list": [
+      { "pagePath": "pages/menu/menu", "text": "点菜" },
+      { "pagePath": "pages/events/events", "text": "饭局" },
+      { "pagePath": "pages/mine/mine", "text": "我的" }
+    ]
+  },
+  "usingComponents": {
+    "t-button": "tdesign-miniprogram/button/button",
+    "t-input": "tdesign-miniprogram/input/input",
+    "t-textarea": "tdesign-miniprogram/textarea/textarea",
+    "t-popup": "tdesign-miniprogram/popup/popup",
+    "t-stepper": "tdesign-miniprogram/stepper/stepper",
+    "t-tag": "tdesign-miniprogram/tag/tag",
+    "t-badge": "tdesign-miniprogram/badge/badge",
+    "t-empty": "tdesign-miniprogram/empty/empty",
+    "t-picker": "tdesign-miniprogram/picker/picker",
+    "t-picker-item": "tdesign-miniprogram/picker-item/picker-item",
+    "t-date-time-picker": "tdesign-miniprogram/date-time-picker/date-time-picker"
+  },
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents",
+  "sitemapLocation": "sitemap.json"
+}

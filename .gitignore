@@ -1,4 +1,5 @@
 .superpowers/
 node_modules/
+miniprogram/node_modules/
 miniprogram/miniprogram_npm/
 .DS_Store
