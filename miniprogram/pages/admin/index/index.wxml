@@ -1,0 +1,16 @@
+<view class="card row" data-url="/pages/admin/orders/orders" bind:tap="go">
+  <view class="flex1 section-title">📋 订单管理</view>
+  <view class="muted">{{newOrders ? newOrders + ' 个新订单' : '没有新订单'}} ›</view>
+</view>
+<view class="card row" data-url="/pages/admin/dishes/dishes" bind:tap="go">
+  <view class="flex1 section-title">🍳 菜品管理</view>
+  <view class="muted">{{dishCount}} 道菜 ›</view>
+</view>
+<view class="card row" data-url="/pages/admin/events/events" bind:tap="go">
+  <view class="flex1 section-title">🍲 饭局管理</view>
+  <view class="muted">{{openEvents ? openEvents + ' 场进行中' : '无进行中' }} ›</view>
+</view>
+<view class="card row" data-url="/pages/admin/wishes/wishes" bind:tap="go">
+  <view class="flex1 section-title">🌠 许愿箱</view>
+  <view class="muted">{{newWishes ? newWishes + ' 条新愿望' : '没有新愿望'}} ›</view>
+</view>
