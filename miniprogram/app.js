@@ -3,7 +3,11 @@ const { call } = require('./utils/api')
 App({
   globalData: { cart: [], openid: '', isAdmin: false },
   onLaunch() {
-    if (!wx.cloud) return console.error('基础库过低，无法使用云能力')
+    if (!wx.cloud) {
+      console.error('基础库过低，无法使用云能力')
+      this.whoamiReady = Promise.resolve({ openid: '', isAdmin: false, claimed: true })
+      return
+    }
     wx.cloud.init({ traceUser: true })
     this.whoamiReady = call('whoami')
       .then((d) => {

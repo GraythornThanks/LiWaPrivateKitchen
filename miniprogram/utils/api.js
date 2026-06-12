@@ -14,7 +14,7 @@ function call(action, payload = {}) {
 function toast(msg, icon = 'none') { wx.showToast({ title: msg, icon }) }
 
 // 失败时自动 toast 后继续抛出；调用方用 .catch(() => null) 判断是否成功
-function callWithToast(action, payload) {
+function callWithToast(action, payload = {}) {
   return call(action, payload).catch((e) => { toast(e.message || '网络开小差了'); throw e })
 }
 
