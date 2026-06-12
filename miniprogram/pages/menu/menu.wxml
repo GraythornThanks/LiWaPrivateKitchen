@@ -1,0 +1,40 @@
+<view wx:if="{{activeEvent}}" class="banner">
+  🍲 「{{activeEvent.title}}」饭局点菜中 · 截止 {{activeEvent.deadlineText}}
+</view>
+
+<scroll-view scroll-x class="cats" enable-flex>
+  <view wx:for="{{categories}}" wx:key="*this"
+        class="chip {{curCat === item ? 'chip-on' : ''}}"
+        data-cat="{{item}}" bind:tap="onCat">{{item}}</view>
+</scroll-view>
+
+<view wx:if="{{!shown.length}}" class="card muted">主厨还没上菜，敬请期待～</view>
+<dish-card wx:for="{{shown}}" wx:key="_id" dish="{{item}}"
+           qty="{{qtyMap[item._id] || 0}}" liked="{{likedMap[item._id]}}"
+           bind:like="onLike" bind:qty="onQty" />
+
+<view class="cart-bar" bind:tap="openCart">
+  <view class="flex1">🛒 已选 {{count}} 份</view>
+  <t-button size="small" theme="primary" disabled="{{!count}}" catch:tap="goCheckout">去下单</t-button>
+</view>
+
+<t-popup visible="{{cartVisible}}" placement="bottom" bind:visible-change="onCartVisible">
+  <view class="cart-pop">
+    <view class="row">
+      <view class="flex1 section-title">已选的菜</view>
+      <view class="muted" bind:tap="clearAll">清空</view>
+    </view>
+    <view wx:for="{{cartItems}}" wx:key="dishId" class="cart-item">
+      <view class="row">
+        <view class="flex1">{{item.name}}</view>
+        <t-stepper theme="filled" min="{{0}}" value="{{item.qty}}"
+                   data-dishid="{{item.dishId}}" bind:change="onCartQty" />
+      </view>
+      <input class="note-input" placeholder="备注：少辣 / 不要香菜…" value="{{item.note}}"
+             data-dishid="{{item.dishId}}" bindinput="onItemNote" />
+    </view>
+    <t-button block theme="primary" bind:tap="goCheckout">去下单</t-button>
+  </view>
+</t-popup>
+
+<profile-sheet visible="{{profileVisible}}" bind:close="onProfileClose" />

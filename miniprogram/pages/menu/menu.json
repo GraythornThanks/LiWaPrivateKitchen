@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "李娃私厨",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "dish-card": "/components/dish-card/dish-card",
+    "profile-sheet": "/components/profile-sheet/profile-sheet"
+  }
+}

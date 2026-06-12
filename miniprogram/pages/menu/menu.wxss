@@ -1,0 +1,10 @@
+.banner { background: #fff3ec; border: 1rpx solid #f0c3ab; color: #c4501f; border-radius: 12rpx; padding: 16rpx 24rpx; margin: 16rpx 24rpx; font-size: 26rpx; }
+.cats { white-space: nowrap; padding: 8rpx 24rpx; }
+.chip { display: inline-block; background: #fff; border-radius: 28rpx; padding: 10rpx 28rpx; margin-right: 16rpx; font-size: 26rpx; color: #666; }
+.chip-on { background: #e3592c; color: #fff; font-weight: 600; }
+.cart-bar { position: fixed; left: 24rpx; right: 24rpx; bottom: 24rpx; background: #2d2d2d; color: #fff; border-radius: 40rpx; padding: 16rpx 16rpx 16rpx 32rpx; display: flex; align-items: center; z-index: 10; }
+page { padding-bottom: 140rpx; }
+.cart-pop { background: #fff; border-radius: 24rpx 24rpx 0 0; padding: 32rpx; max-height: 70vh; overflow-y: auto; }
+.cart-item { border-bottom: 1rpx solid #f0f0f0; padding: 16rpx 0; }
+.note-input { background: #f6f6f6; border-radius: 8rpx; padding: 12rpx 16rpx; margin-top: 12rpx; font-size: 24rpx; }
+.cart-pop .t-button { margin-top: 24rpx; }
