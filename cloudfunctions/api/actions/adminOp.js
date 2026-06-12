@@ -23,6 +23,11 @@ async function dishUpdate(ctx, p) {
   for (const k of DISH_FIELDS) if (p.patch && p.patch[k] !== undefined) patch[k] = p.patch[k]
   if (patch.name !== undefined && (typeof patch.name !== 'string' || !patch.name.trim())) return err('INVALID', '菜名不能为空')
   if (patch.status !== undefined && !['on', 'off'].includes(patch.status)) return err('INVALID', '状态不对劲')
+  if (patch.category !== undefined && (typeof patch.category !== 'string' || !patch.category)) return err('INVALID', '选个分类')
+  if (patch.photo !== undefined && typeof patch.photo !== 'string') return err('INVALID', '照片不对劲')
+  if (patch.desc !== undefined && typeof patch.desc !== 'string') return err('INVALID', '介绍不对劲')
+  if (patch.desc !== undefined) patch.desc = patch.desc.slice(0, 50)
+  if (patch.sort !== undefined && !Number.isFinite(patch.sort)) return err('INVALID', '排序要是数字')
   patch.updatedAt = ctx.now
   await ctx.db.updateDoc('dishes', p.dishId, patch)
   return ok()

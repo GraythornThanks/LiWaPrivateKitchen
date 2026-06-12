@@ -40,4 +40,13 @@ describe('dishCreate / dishUpdate / dishDelete', () => {
     expect(await db.getDoc('dishes', 'd1')).toBeNull()
     expect(await db.count('likes', {})).toBe(1)
   })
+
+  it('更新时非法字段值 → INVALID', async () => {
+    const db = seed({ dishes: [{ _id: 'd1', name: '红烧肉', status: 'on', likeCount: 0 }] })
+    expect((await adminOp(ctx(db), { op: 'dishUpdate', dishId: 'd1', patch: { category: null } })).code).toBe('INVALID')
+    expect((await adminOp(ctx(db), { op: 'dishUpdate', dishId: 'd1', patch: { sort: 'abc' } })).code).toBe('INVALID')
+    expect((await adminOp(ctx(db), { op: 'dishUpdate', dishId: 'd1', patch: { photo: 123 } })).code).toBe('INVALID')
+    expect((await adminOp(ctx(db), { op: 'dishUpdate', dishId: 'd1', patch: { desc: 'x'.repeat(60) } })).ok).toBe(true)
+    expect((await db.getDoc('dishes', 'd1')).desc).toHaveLength(50)
+  })
 })
