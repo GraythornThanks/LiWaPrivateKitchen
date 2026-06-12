@@ -3,6 +3,7 @@
 .photo-empty { background: #f3ece4; display: flex; align-items: center; justify-content: center; font-size: 48rpx; }
 .info { flex: 1; margin: 0 20rpx; min-width: 0; }
 .name { font-size: 30rpx; font-weight: 600; }
+.muted { color: #999; font-size: 24rpx; }
 .like { margin-top: 8rpx; font-size: 24rpx; color: #999; }
 .like.liked { color: #e3592c; }
 .stepper { flex-shrink: 0; }
